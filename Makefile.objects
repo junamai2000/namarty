@@ -1,0 +1,8 @@
+namarty.lo: /home/junya/namarty/namarty.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/home/junya/namarty $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /home/junya/namarty/namarty.cc -o namarty.lo 
+$(phplibdir)/namarty.la: ./namarty.la
+	$(LIBTOOL) --mode=install cp ./namarty.la $(phplibdir)
+
+./namarty.la: $(shared_objects_namarty) $(NAMARTY_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_namarty) $(NAMARTY_SHARED_LIBADD)
+

@@ -1,0 +1,561 @@
+Terminals which are not used
+
+   N_INCLUDE
+   N_INCLUDE_PHP
+   N_START_CAPTURE
+   N_END_CAPTURE
+   N_LDELIM
+   N_RDELIM
+   N_START_SECTION
+   N_SECTIONELSE
+   N_END_SECTION
+   N_START_STRIP
+   N_END_STRIP
+   N_INSERT
+   N_CONFIG_LOAD
+   N_BLOCK
+   N_START_LITERAL
+   N_END_LITERAL
+   N_START_PHP
+   N_END_PHP
+   N_A_FILE
+   N_A_ASSIGN
+   N_A_ONCE
+   N_A_SCRIPT
+   N_A_NAME
+   N_A_LOOP
+   N_A_START
+   N_A_STEP
+   N_A_MAX
+   N_A_SHOW
+   N_A_FROM
+   N_A_ITEM
+   N_A_KEY
+   N_A_SECTION
+   N_A_SCOPE
+   N_A_GLOBAL
+   N_DOUBLE_QUOTES
+   N_IS_NOT_EQUAL
+   N_IS_SMALLER_OR_EQUA
+   N_IS_GREATER_OR_EQUAL
+   N_IS_SMALLER
+   N_IS_GREATER
+   N_MOD
+   N_BOOLEAN_AND
+   N_BOOLEAN_OR
+   N_BOOLEAN_NOT
+
+
+Grammar
+
+    0 $accept: namarty $end
+
+    1 namarty: /* empty */
+    2        | namarty statements
+
+    3 statements: N_PRINT_STRING
+    4           | N_VARIABLE_NAME
+
+    5 @1: /* empty */
+
+    6 @2: /* empty */
+
+    7 statements: foreach @1 namarty foreachelse_stm N_END_FOREACH @2
+    8           | N_START_IF expr namarty elseif_stm N_END_IF
+    9           | N_START_IF expr namarty elseif_stm N_ELSE namarty N_END_IF
+   10           | error
+
+   11 foreachelse_stm: /* empty */
+
+   12 @3: /* empty */
+
+   13 foreachelse_stm: N_FOREACHLESE @3 namarty
+
+   14 elseif_stm: /* empty */
+   15           | N_ELSE_IF expr namarty elseif_stm
+
+   16 expr: N_VARIABLE_NAME N_IS_EQUAL N_NUMBER
+
+   17 foreach: N_START_FOREACH foreach_attribute
+
+   18 foreach_attribute: /* empty */
+   19                  | N_STRING '=' N_STRING foreach_attribute
+   20                  | N_STRING '=' '$' N_STRING foreach_attribute
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'$' (36) 20
+'=' (61) 19 20
+error (256) 10
+N_INCLUDE (258)
+N_INCLUDE_PHP (259)
+N_START_CAPTURE (260)
+N_END_CAPTURE (261)
+N_LDELIM (262)
+N_RDELIM (263)
+N_START_SECTION (264)
+N_SECTIONELSE (265)
+N_END_SECTION (266)
+N_START_FOREACH (267) 17
+N_FOREACHLESE (268) 13
+N_END_FOREACH (269) 7
+N_START_STRIP (270)
+N_END_STRIP (271)
+N_INSERT (272)
+N_CONFIG_LOAD (273)
+N_BLOCK (274)
+N_START_LITERAL (275)
+N_END_LITERAL (276)
+N_START_PHP (277)
+N_END_PHP (278)
+N_START_IF (279) 8 9
+N_ELSE_IF (280) 15
+N_ELSE (281) 9
+N_END_IF (282) 8 9
+N_VARIABLE_NAME (283) 4 16
+N_NUMBER (284) 16
+N_A_FILE (285)
+N_A_ASSIGN (286)
+N_A_ONCE (287)
+N_A_SCRIPT (288)
+N_A_NAME (289)
+N_A_LOOP (290)
+N_A_START (291)
+N_A_STEP (292)
+N_A_MAX (293)
+N_A_SHOW (294)
+N_A_FROM (295)
+N_A_ITEM (296)
+N_A_KEY (297)
+N_A_SECTION (298)
+N_A_SCOPE (299)
+N_A_GLOBAL (300)
+N_PRINT_STRING (301) 3
+N_DOUBLE_QUOTES (302)
+N_STRING (303) 19 20
+N_IS_EQUAL (304) 16
+N_IS_NOT_EQUAL (305)
+N_IS_SMALLER_OR_EQUA (306)
+N_IS_GREATER_OR_EQUAL (307)
+N_IS_SMALLER (308)
+N_IS_GREATER (309)
+N_MOD (310)
+N_BOOLEAN_AND (311)
+N_BOOLEAN_OR (312)
+N_BOOLEAN_NOT (313)
+
+
+Nonterminals, with rules where they appear
+
+$accept (61)
+    on left: 0
+namarty (62)
+    on left: 1 2, on right: 0 2 7 8 9 13 15
+statements (63)
+    on left: 3 4 7 8 9 10, on right: 2
+@1 (64)
+    on left: 5, on right: 7
+@2 (65)
+    on left: 6, on right: 7
+foreachelse_stm (66)
+    on left: 11 13, on right: 7
+@3 (67)
+    on left: 12, on right: 13
+elseif_stm (68)
+    on left: 14 15, on right: 8 9 15
+expr (69)
+    on left: 16, on right: 8 9 15
+foreach (70)
+    on left: 17, on right: 7
+foreach_attribute (71)
+    on left: 18 19 20, on right: 17 19 20
+
+
+state 0
+
+    0 $accept: . namarty $end
+
+    $default  reduce using rule 1 (namarty)
+
+    namarty  go to state 1
+
+
+state 1
+
+    0 $accept: namarty . $end
+    2 namarty: namarty . statements
+
+    $end             shift, and go to state 2
+    error            shift, and go to state 3
+    N_START_FOREACH  shift, and go to state 4
+    N_START_IF       shift, and go to state 5
+    N_VARIABLE_NAME  shift, and go to state 6
+    N_PRINT_STRING   shift, and go to state 7
+
+    statements  go to state 8
+    foreach     go to state 9
+
+
+state 2
+
+    0 $accept: namarty $end .
+
+    $default  accept
+
+
+state 3
+
+   10 statements: error .
+
+    $default  reduce using rule 10 (statements)
+
+
+state 4
+
+   17 foreach: N_START_FOREACH . foreach_attribute
+
+    N_STRING  shift, and go to state 10
+
+    $default  reduce using rule 18 (foreach_attribute)
+
+    foreach_attribute  go to state 11
+
+
+state 5
+
+    8 statements: N_START_IF . expr namarty elseif_stm N_END_IF
+    9           | N_START_IF . expr namarty elseif_stm N_ELSE namarty N_END_IF
+
+    N_VARIABLE_NAME  shift, and go to state 12
+
+    expr  go to state 13
+
+
+state 6
+
+    4 statements: N_VARIABLE_NAME .
+
+    $default  reduce using rule 4 (statements)
+
+
+state 7
+
+    3 statements: N_PRINT_STRING .
+
+    $default  reduce using rule 3 (statements)
+
+
+state 8
+
+    2 namarty: namarty statements .
+
+    $default  reduce using rule 2 (namarty)
+
+
+state 9
+
+    7 statements: foreach . @1 namarty foreachelse_stm N_END_FOREACH @2
+
+    $default  reduce using rule 5 (@1)
+
+    @1  go to state 14
+
+
+state 10
+
+   19 foreach_attribute: N_STRING . '=' N_STRING foreach_attribute
+   20                  | N_STRING . '=' '$' N_STRING foreach_attribute
+
+    '='  shift, and go to state 15
+
+
+state 11
+
+   17 foreach: N_START_FOREACH foreach_attribute .
+
+    $default  reduce using rule 17 (foreach)
+
+
+state 12
+
+   16 expr: N_VARIABLE_NAME . N_IS_EQUAL N_NUMBER
+
+    N_IS_EQUAL  shift, and go to state 16
+
+
+state 13
+
+    8 statements: N_START_IF expr . namarty elseif_stm N_END_IF
+    9           | N_START_IF expr . namarty elseif_stm N_ELSE namarty N_END_IF
+
+    $default  reduce using rule 1 (namarty)
+
+    namarty  go to state 17
+
+
+state 14
+
+    7 statements: foreach @1 . namarty foreachelse_stm N_END_FOREACH @2
+
+    $default  reduce using rule 1 (namarty)
+
+    namarty  go to state 18
+
+
+state 15
+
+   19 foreach_attribute: N_STRING '=' . N_STRING foreach_attribute
+   20                  | N_STRING '=' . '$' N_STRING foreach_attribute
+
+    N_STRING  shift, and go to state 19
+    '$'       shift, and go to state 20
+
+
+state 16
+
+   16 expr: N_VARIABLE_NAME N_IS_EQUAL . N_NUMBER
+
+    N_NUMBER  shift, and go to state 21
+
+
+state 17
+
+    2 namarty: namarty . statements
+    8 statements: N_START_IF expr namarty . elseif_stm N_END_IF
+    9           | N_START_IF expr namarty . elseif_stm N_ELSE namarty N_END_IF
+
+    error            shift, and go to state 3
+    N_START_FOREACH  shift, and go to state 4
+    N_START_IF       shift, and go to state 5
+    N_ELSE_IF        shift, and go to state 22
+    N_VARIABLE_NAME  shift, and go to state 6
+    N_PRINT_STRING   shift, and go to state 7
+
+    N_ELSE    reduce using rule 14 (elseif_stm)
+    N_END_IF  reduce using rule 14 (elseif_stm)
+
+    statements  go to state 8
+    elseif_stm  go to state 23
+    foreach     go to state 9
+
+
+state 18
+
+    2 namarty: namarty . statements
+    7 statements: foreach @1 namarty . foreachelse_stm N_END_FOREACH @2
+
+    error            shift, and go to state 3
+    N_START_FOREACH  shift, and go to state 4
+    N_FOREACHLESE    shift, and go to state 24
+    N_START_IF       shift, and go to state 5
+    N_VARIABLE_NAME  shift, and go to state 6
+    N_PRINT_STRING   shift, and go to state 7
+
+    N_END_FOREACH  reduce using rule 11 (foreachelse_stm)
+
+    statements       go to state 8
+    foreachelse_stm  go to state 25
+    foreach          go to state 9
+
+
+state 19
+
+   19 foreach_attribute: N_STRING '=' N_STRING . foreach_attribute
+
+    N_STRING  shift, and go to state 10
+
+    $default  reduce using rule 18 (foreach_attribute)
+
+    foreach_attribute  go to state 26
+
+
+state 20
+
+   20 foreach_attribute: N_STRING '=' '$' . N_STRING foreach_attribute
+
+    N_STRING  shift, and go to state 27
+
+
+state 21
+
+   16 expr: N_VARIABLE_NAME N_IS_EQUAL N_NUMBER .
+
+    $default  reduce using rule 16 (expr)
+
+
+state 22
+
+   15 elseif_stm: N_ELSE_IF . expr namarty elseif_stm
+
+    N_VARIABLE_NAME  shift, and go to state 12
+
+    expr  go to state 28
+
+
+state 23
+
+    8 statements: N_START_IF expr namarty elseif_stm . N_END_IF
+    9           | N_START_IF expr namarty elseif_stm . N_ELSE namarty N_END_IF
+
+    N_ELSE    shift, and go to state 29
+    N_END_IF  shift, and go to state 30
+
+
+state 24
+
+   13 foreachelse_stm: N_FOREACHLESE . @3 namarty
+
+    $default  reduce using rule 12 (@3)
+
+    @3  go to state 31
+
+
+state 25
+
+    7 statements: foreach @1 namarty foreachelse_stm . N_END_FOREACH @2
+
+    N_END_FOREACH  shift, and go to state 32
+
+
+state 26
+
+   19 foreach_attribute: N_STRING '=' N_STRING foreach_attribute .
+
+    $default  reduce using rule 19 (foreach_attribute)
+
+
+state 27
+
+   20 foreach_attribute: N_STRING '=' '$' N_STRING . foreach_attribute
+
+    N_STRING  shift, and go to state 10
+
+    $default  reduce using rule 18 (foreach_attribute)
+
+    foreach_attribute  go to state 33
+
+
+state 28
+
+   15 elseif_stm: N_ELSE_IF expr . namarty elseif_stm
+
+    $default  reduce using rule 1 (namarty)
+
+    namarty  go to state 34
+
+
+state 29
+
+    9 statements: N_START_IF expr namarty elseif_stm N_ELSE . namarty N_END_IF
+
+    $default  reduce using rule 1 (namarty)
+
+    namarty  go to state 35
+
+
+state 30
+
+    8 statements: N_START_IF expr namarty elseif_stm N_END_IF .
+
+    $default  reduce using rule 8 (statements)
+
+
+state 31
+
+   13 foreachelse_stm: N_FOREACHLESE @3 . namarty
+
+    $default  reduce using rule 1 (namarty)
+
+    namarty  go to state 36
+
+
+state 32
+
+    7 statements: foreach @1 namarty foreachelse_stm N_END_FOREACH . @2
+
+    $default  reduce using rule 6 (@2)
+
+    @2  go to state 37
+
+
+state 33
+
+   20 foreach_attribute: N_STRING '=' '$' N_STRING foreach_attribute .
+
+    $default  reduce using rule 20 (foreach_attribute)
+
+
+state 34
+
+    2 namarty: namarty . statements
+   15 elseif_stm: N_ELSE_IF expr namarty . elseif_stm
+
+    error            shift, and go to state 3
+    N_START_FOREACH  shift, and go to state 4
+    N_START_IF       shift, and go to state 5
+    N_ELSE_IF        shift, and go to state 22
+    N_VARIABLE_NAME  shift, and go to state 6
+    N_PRINT_STRING   shift, and go to state 7
+
+    N_ELSE    reduce using rule 14 (elseif_stm)
+    N_END_IF  reduce using rule 14 (elseif_stm)
+
+    statements  go to state 8
+    elseif_stm  go to state 38
+    foreach     go to state 9
+
+
+state 35
+
+    2 namarty: namarty . statements
+    9 statements: N_START_IF expr namarty elseif_stm N_ELSE namarty . N_END_IF
+
+    error            shift, and go to state 3
+    N_START_FOREACH  shift, and go to state 4
+    N_START_IF       shift, and go to state 5
+    N_END_IF         shift, and go to state 39
+    N_VARIABLE_NAME  shift, and go to state 6
+    N_PRINT_STRING   shift, and go to state 7
+
+    statements  go to state 8
+    foreach     go to state 9
+
+
+state 36
+
+    2 namarty: namarty . statements
+   13 foreachelse_stm: N_FOREACHLESE @3 namarty .
+
+    error            shift, and go to state 3
+    N_START_FOREACH  shift, and go to state 4
+    N_START_IF       shift, and go to state 5
+    N_VARIABLE_NAME  shift, and go to state 6
+    N_PRINT_STRING   shift, and go to state 7
+
+    N_END_FOREACH  reduce using rule 13 (foreachelse_stm)
+
+    statements  go to state 8
+    foreach     go to state 9
+
+
+state 37
+
+    7 statements: foreach @1 namarty foreachelse_stm N_END_FOREACH @2 .
+
+    $default  reduce using rule 7 (statements)
+
+
+state 38
+
+   15 elseif_stm: N_ELSE_IF expr namarty elseif_stm .
+
+    $default  reduce using rule 15 (elseif_stm)
+
+
+state 39
+
+    9 statements: N_START_IF expr namarty elseif_stm N_ELSE namarty N_END_IF .
+
+    $default  reduce using rule 9 (statements)
